@@ -1,0 +1,48 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+  # Data sources: traces
+  jaeger:
+    protocols:
+      grpc:
+      thrift_binary:
+      thrift_compact:
+      thrift_http:
+
+exporters:
+  logging:
+    loglevel: debug
+  jaeger:
+    endpoint: localhost:14250
+    tls:
+      insecure: true
+  prometheus:
+    endpoint: localhost:9404
+  file:
+    path: "./minikube.log"
+
+processors:
+  batch:
+  filter:
+    metrics:
+      include:
+        match_type: strict
+        metric_names:
+          - process.runtime.jvm.cpu.utilization
+          - process.runtime.jvm.memory.usage
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [jaeger,logging]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus, logging]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [file]
