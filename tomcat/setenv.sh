@@ -22,9 +22,9 @@ export OTEL_RESOURCE_ATTRIBUTES=service.name=jpetsotre-tomcat
 # export OTEL_INSTRUMENTATION_servlet_ENABLED=false
 # export OTEL_INSTRUMENTATION_spring_boot_ENABLED=false
 export OTEL_METRIC_EXPORT_INTERVAL=1000
-export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-deployment-opentelemetry-collector:4317
-export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-deployment-opentelemetry-collector:4317
-export OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://otel-deployment-opentelemetry-collector:4317
+export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-daemonset-opentelemetry-collector:4317
+export OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel-daemonset-opentelemetry-collector:4317
+export OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://otel-daemonset-opentelemetry-collector:4317
 export OTEL_TRACES_EXPORTER=otlp
 export OTEL_METRICS_EXPORTER=otlp
 export OTEL_LOGS_EXPORTER=otlp
