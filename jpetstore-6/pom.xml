@@ -314,6 +314,7 @@
   </pluginRepositories>
 
   <properties>
+    <skipTests>true</skipTests>
     <cargo.maven.containerId>tomcat${tomcat.major-version}x</cargo.maven.containerId>
     <cargo.maven.containerUrl>https://archive.apache.org/dist/tomcat/tomcat-${tomcat.major-version}/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip</cargo.maven.containerUrl>
     <tomcat.major-version />

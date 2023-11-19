@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tomcat
-        image: roychshao/sunbird-server:latest
+        image: roychshao/sunbird-ap:latest
         ports:
         - containerPort: 8080
         # env:

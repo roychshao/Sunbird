@@ -57,6 +57,9 @@ public class CatalogService {
   }
 
   public List<Product> getProductListByCategory(String categoryId) {
+    // int a = 0, b = 1;
+    // int c = b/a;
+    // System.out.println("divided by zero: " + c);
     return productMapper.getProductListByCategory(categoryId);
   }
 
