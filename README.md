@@ -39,7 +39,7 @@ First of all, we do not recommend you to try to run the cluster on your node bec
 git clone https://github.com/roychshao/Sunbird.git
 ```
 
-- ### Pre-config MySQL
+- ### Pre-config MySQL and update jpetstore.war
 ```
 /* first login mysql */
 mysql> source ./jpetstore-6/src/main/resources/database/jpetstore-hsqldb-schema.sql
@@ -53,6 +53,15 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.url=<your mysql url>
 spring.datasource.username=<your mysql username>
 spring.datasource.password=<your mysql password>
+```
+generate jpetstore.war and put it to ./tomcat
+
+```
+/* in ./jpetstore-6 */
+./mvnw clean package
+./mvnw cargo:run -P tomcat90
+cp ./target/jpetstore.war ./../tomcat
+cd ..
 ```
 
 - ### Rebuild docker image
