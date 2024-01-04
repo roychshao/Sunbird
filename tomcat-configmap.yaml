@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tomcat-configmap
+data:
+  database_url: jdbc:mysql://mysqlagent:3306/jpetstore?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+  database_username: root
+  database_password: 620109roy
