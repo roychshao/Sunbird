@@ -125,7 +125,7 @@ minikube start
 minikube service tomcat-service
 ```
 
-Now the cluster is finished and you can visit them with browser.
+Now the cluster is finished and you can visit them with browser.  
 Jpetstore: by minikube service  
 Jaeger: http://localhost:16686  
 Prometheus: http://localhost:9090  
@@ -134,4 +134,5 @@ Grafana: http://localhost:3000
 Finally, close the cluster by
 ```
 ./delete.sh
+minikube stop
 ```
