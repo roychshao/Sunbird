@@ -1,0 +1,9 @@
+FROM mysql
+WORKDIR /
+ENV MYSQL_ROOT_USER=root
+ENV MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_DATABASE=jpetstore
+ADD 01-jpetstore-hsqldb-schema.sql /docker-entrypoint-initdb.d
+ADD 02-jpetstore-hsqldb-dataload.sql /docker-entrypoint-initdb.d
+
+CMD ["mysqld"]

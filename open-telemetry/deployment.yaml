@@ -1,0 +1,100 @@
+mode: deployment
+
+# We only want one of these collectors - any more and we'd produce duplicate data
+replicaCount: 1
+
+presets:
+  # enables the k8sclusterreceiver and adds it to the metrics pipelines
+  clusterMetrics:
+    enabled: true
+  # enables the k8sobjectsreceiver to collect events only and adds it to the logs pipelines
+  kubernetesEvents:
+    enabled: true
+
+# service:
+#   type: LoadBalancer
+## The chart only includes the loggingexporter by default
+## If you want to send your data somewhere you need to
+## configure an exporter, such as the otlpexporter
+
+
+image:
+  repository: roychshao/custom-otelcol
+  tag: latest
+  pullPolicy: IfNotPresent
+
+command:
+  name: custom-otelcol
+  extraArgs: [--config=./../custom-otelcol/custom-otelcol/config.yaml]
+
+# config:
+#   receivers:
+#     otlp:
+#       protocols:
+#         grpc:
+#           endpoint: localhost:4317
+#     jaeger: null
+#     prometheus: null
+#     zipkin: null
+#     k8scluster: {}
+
+#   exporters:
+#     logging: null
+#     debug: null
+#     prometheus: null
+#     otlp:
+#       endpoint: 192.168.43.182:4317  # should dynamically adjust
+#       tls:
+#         insecure: true
+
+#   processors:
+#     batch: {}
+#     memory_limiter:
+#       check_interval: 1s
+#       limit_mib: 4000
+#       spike_limit_mib: 800
+
+#   extensions:
+#     file_storage:
+#       directory: /var/lib/otelcol/storage
+#       timeout: 1s
+#       compaction:
+#         on_start: true
+#         directory: /var/lib/otelcol/storage
+#         max_transaction_size: 65_535
+#       fsync: false
+#     memory_ballast: null
+#     health_check: {}
+
+#   service:
+#     extensions:
+#       - file_storage
+#       - memory_ballast
+#       - health_check
+#     pipelines:
+#       traces:
+#         receivers:
+#           - otlp
+#         processors:
+#           - batch
+#           - memory_limiter
+#         exporters:
+#           - otlp
+#       metrics:
+#         receivers:
+#           - otlp
+#           - k8scluster
+#         processors:
+#           - batch
+#           - memory_limiter
+#         exporters:
+#           - otlp
+#       logs:
+#         receivers:
+#           - otlp
+#           - k8sobjects
+#         processors:
+#           - batch
+#           - memory_limiter
+#         exporters:
+#           - otlp

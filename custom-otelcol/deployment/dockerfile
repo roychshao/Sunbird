@@ -1,0 +1,25 @@
+# referenced https://itnext.io/optimizing-observability-building-and-deploying-a-custom-opentelemetry-collector-aafb08798e10
+
+# FROM golang:latest as build
+# ARG OTEL_VERSION=latest
+# WORKDIR /app
+# COPY builder-config.yaml /app/builder-config.yaml
+
+# RUN go install go.opentelemetry.io/collector/cmd/builder@${OTEL_VERSION}
+# RUN CGO_ENABLED=0 builder --config=builder-config.yaml
+
+# FROM scratch
+
+# ARG USER_UID=10001
+# USER ${USER_UID}
+
+# COPY --from=build /app/custom-otelcol/custom-otelcol /
+# EXPOSE 4317/tcp
+
+# CMD ["custum-otelcol"]
+
+
+FROM ubuntu:22.04
+WORKDIR /app
+COPY ./custom-otelcol/custom-otelcol /app
+COPY ./custom-otelcol/config.yaml /app/config.yaml

@@ -1,0 +1,42 @@
+receivers:
+  k8s_cluster:
+  k8s_events:
+  k8sobjects:
+
+exporters:
+  otlp:
+    endpoint: ${EXTERNAL_OTELCOL_ADDR}:4317
+    tls:
+      insecure: true
+
+processors:
+  batch:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 4000
+    spike_limit_mib: 800
+
+extensions:
+  file_storage:
+    directory: /app
+    timeout: 1s
+    compaction:
+      on_start: true
+      directory: /tmp/
+      max_transaction_size: 65_536
+    fsync: false
+  health_check:
+  memory_ballast:
+
+service:
+  extensions: [file_storage, health_check, memory_ballast]
+  pipelines:
+    metrics:
+      receivers: [k8s_cluster]
+      processors: [batch, memory_limiter]
+      exporters: [otlp]
+    logs:
+      receivers: [k8s_cluster, k8s_events, k8sobjects]
+      processors: [batch, memory_limiter]
+      exporters: [otlp]
+

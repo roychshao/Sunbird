@@ -1,0 +1,41 @@
+dist:
+  name: custom-otelcol
+  desciption: custom otelcol with otlp receiver/exporter and file_storage extension
+  output_path: ./custom-otelcol
+
+receivers:
+  - gomod: "go.opentelemetry.io/collector/receiver/otlpreceiver v0.95.0"
+    import: "go.opentelemetry.io/collector/receiver/otlpreceiver"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sclusterreceiver v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sclusterreceiver"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8seventsreceiver v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8seventsreceiver"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/k8sobjectsreceiver"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusreceiver v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusreceiver"
+
+processors:
+  - gomod: "go.opentelemetry.io/collector/processor/batchprocessor v0.95.0"
+    import: "go.opentelemetry.io/collector/processor/batchprocessor"
+  - gomod: "go.opentelemetry.io/collector/processor/memorylimiterprocessor v0.95.0"
+    import: "go.opentelemetry.io/collector/processor/memorylimiterprocessor"
+
+exporters:
+  - gomod: "go.opentelemetry.io/collector/exporter/otlpexporter v0.95.0"
+    import: "go.opentelemetry.io/collector/exporter/otlpexporter"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/prometheusexporter v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/prometheusexporter"
+
+extensions:
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/extension/storage/filestorage v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/extension/storage/filestorage"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/extension/healthcheckextension v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/extension/healthcheckextension"
+  - gomod: "go.opentelemetry.io/collector/extension/ballastextension v0.95.0"
+    import: "go.opentelemetry.io/collector/extension/ballastextension"
+
+replaces:
+  # a list of "replaces" directives that will be part of the resulting go.mod 
+  - github.com/open-telemetry/opentelemetry-collector-contrib/internal/common => github.com/open-telemetry/opentelemetry-collector-contrib/internal/common v0.95.0
+

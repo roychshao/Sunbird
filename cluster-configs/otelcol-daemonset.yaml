@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: otelcol-daemonset
+  labels:
+    app: otelcol-daemonset
+spec:
+  selector:
+    matchLabels:
+      app: otelcol-daemonset
+  template:
+    metadata:
+      labels:
+        app: otelcol-daemonset
+    spec:
+      containers:
+      - name: otelcol-daemonset
+        image: roychshao/otelcol-daemonset
+        command: ["/app/custom-otelcol"]
+        args: ["--config=/app/config.yaml"]
+        ports:
+        - containerPort: 4317
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: otelcol-daemonset-service
+spec:
+  selector:
+    app: otelcol-daemonset
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 4317
+      targetPort: 4317
+      nodePort: 30006

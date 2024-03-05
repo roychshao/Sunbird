@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otelcol-deployment
+  labels:
+    app: otelcol-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otelcol-deployment
+  template:
+    metadata:
+      labels:
+        app: otelcol-deployment
+    spec:
+      containers:
+      - name: otelcol-deployment
+        image: roychshao/otelcol-deployment
+        command: ["/app/custom-otelcol"]
+        args: ["--config=/app/config.yaml"]
+        ports:
+        - containerPort: 4317
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: otelcol-deployment-service
+spec:
+  selector:
+    app: otelcol-deployment
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 4317
+      targetPort: 4317
+      nodePort: 30005

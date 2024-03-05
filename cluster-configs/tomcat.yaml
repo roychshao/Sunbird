@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat
+  labels:
+    app: tomcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcat
+  template:
+    metadata:
+      labels:
+        app: tomcat
+    spec:
+      containers:
+      - name: tomcat
+        image: ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest
+        ports:
+        - containerPort: 8080
+        # env:
+        # - name: TZ
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: tomcat-configmap
+        #       key: timezone
+        # - name: DB_URL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: tomcat-configmap
+        #       key: database_url
+        # - name: DB_USN
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: tomcat-configmap
+        #       key: database_username
+        # - name: DB_PSW
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: tomcat-configmap
+        #       key: database_password
+        # - name: DB_USN
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: tomcat-secret
+        #       key: database_username
+        # - name: DB_PSW
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: tomcat-secret
+        #       key: database_password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-service
+spec:
+  selector:
+    app: tomcat
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30000

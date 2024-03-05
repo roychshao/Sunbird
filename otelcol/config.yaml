@@ -1,0 +1,67 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+  otlp/2:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:55690
+      http:
+        endpoint: 0.0.0.0:55691
+
+
+exporters:
+  loki:
+    endpoint: "http://localhost:3100/loki-amd64/api/v1/push"
+
+  loki/2:
+    endpoint: "http://localhost:3100/loki-arm64/api/v1/push"
+
+  prometheus:
+    endpoint: localhost:9404
+    resource_to_telemetry_conversion:
+      enabled: true
+  
+  prometheus/2:
+    endpoint: localhost:9405
+    resource_to_telemetry_conversion:
+      enabled: true
+
+  otlp:
+    endpoint: localhost:6000
+    tls:
+      insecure: true
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp]
+    traces/2:
+      receivers: [otlp/2]
+      processors: [batch]
+      exporters: [otlp]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus]
+    metrics/2:
+      receivers: [otlp/2]
+      processors: [batch]
+      exporters: [prometheus/2]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [loki]
+    logs/2:
+      receivers: [otlp/2]
+      processors: [batch]
+      exporters: [loki/2]
+

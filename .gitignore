@@ -1,0 +1,7 @@
+/prometheus-2.47.0/data
+/prometheus-2.47.0/prometheus
+/jpetstore-6/target
+/.vim
+ocb
+/custom-otelcol/deployment/custom-otelcol
+/custom-otelcol/daemonset/custom-otelcol
