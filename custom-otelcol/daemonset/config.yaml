@@ -5,9 +5,11 @@ receivers:
 
 exporters:
   otlp:
-    endpoint: ${EXTERNAL_OTELCOL_ADDR}:4317
+    endpoint: 192.168.101.128:4317
     tls:
       insecure: true
+    sending_queue:
+      storage: file_storage
 
 processors:
   batch:

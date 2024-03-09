@@ -7,10 +7,13 @@ receivers:
         endpoint: 0.0.0.0:4318
 
 exporters:
+  debug:
   otlp:
-    endpoint: ${EXTERNAL_OTELCOL_ADDR}:4317
+    endpoint: 192.168.101.128:4317
     tls:
       insecure: true
+    sending_queue:
+      storage: file_storage
 
 processors:
   batch:
@@ -37,13 +40,13 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [otlp]
+      exporters: [debug, otlp]
     metrics:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [otlp]
+      exporters: [debug, otlp]
     logs:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [otlp]
+      exporters: [debug, otlp]
 

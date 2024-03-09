@@ -7,8 +7,8 @@ export DOCKERHUB_USERNAME=roychshao
 export IMAGE_NAME=sunbird-ap-amd64
 # docker inspect -f '{{.NetworkSettings.IPAddress}}' mysql_node
 # export MYSQL_ADDR=$(docker inspect -f '{{.NetworkSettings.IPAddress}}' mysql_node)
-export MYSQL_ADDR=192.168.43.182
-export EXTERNAL_OTELCOL_ADDR=192.168.43.182
+export MYSQL_ADDR=192.168.101.128
+export EXTERNAL_OTELCOL_ADDR=192.168.101.128
 
 envsubst < ./cluster-configs/mysqlagent.yaml | kubectl apply -f -
 envsubst < ./cluster-configs/tomcat.yaml | kubectl apply -f -
