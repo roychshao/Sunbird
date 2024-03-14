@@ -50,12 +50,17 @@ export IMAGE_NAME=sunbird-ap-amd64 (sunbird-ap-arm64 or yours)
 export MYSQL_ADDR=<your ip address>
 ```
 
-- ### Modify ip-address where collectors in kubernetes environment sends to
+- ### you have to build the custom collector with opentelemetry collector builder again.
 ```
-cd ./open-telemetry
-// modify deployment.yaml and daemenset.yaml in the config.exporter.otlp.endpoint to your otelcol's address
-// for multitenant, multiple datasources may be configured, the port now is 4317 for the first datasource, 55690 for the second
+download the ocb from https://opentelemetry.io/docs/collector/custom-collector/, please download the 0.95.0 version
+copy it to ./custom-otelcol and build the custom-otelcol with ocb
+vim ./deployment/config.yaml // modify exporters.otlp.endpoint to where your gateway otelcol on
+copy ./deployment/config.yaml to the ./custom-otelcol/deployment/custom-otelcol
+vim ./daemonset/config.yaml // modify exporters.otlp.endpoint to where your gateway otelcol on
+copy ./daemonset/config.yaml to the ./custom-otelcol/daemonset/custom-otelcol
 ```
+docker build and tag it and modify ./cluster-configs/otelcol-deployment.yaml and ./cluster-configs/otelcol-daemonset.yaml  
+modify spec.template.spec.containers.image to your image name.  
 
 - ### Running observability backends
 in this step, you may need to open several terminals for each backend
