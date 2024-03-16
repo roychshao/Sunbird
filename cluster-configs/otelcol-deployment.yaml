@@ -21,7 +21,12 @@ spec:
         args: ["--config=/app/config.yaml"]
         ports:
         - containerPort: 4317
-
+      - name: socket-sidecar
+        image: roychshao/sunbird-socketsidecar
+        command: ["node"]
+        args: ["/app/index.js"]
+        ports:
+        - containerPort: 3000
 ---
 
 apiVersion: v1
@@ -33,7 +38,13 @@ spec:
     app: otelcol-deployment
   type: LoadBalancer
   ports:
-    - protocol: TCP
+    - name: otlp
+      protocol: TCP
       port: 4317
       targetPort: 4317
       nodePort: 30005
+    - name: socket
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 30006

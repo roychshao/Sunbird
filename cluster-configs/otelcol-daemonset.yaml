@@ -35,4 +35,4 @@ spec:
     - protocol: TCP
       port: 4317
       targetPort: 4317
-      nodePort: 30006
+      nodePort: 30007

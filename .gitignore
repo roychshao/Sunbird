@@ -5,3 +5,6 @@
 ocb
 /custom-otelcol/deployment/custom-otelcol
 /custom-otelcol/daemonset/custom-otelcol
+/node_modules
+/pulling-server/node_modules
+/custom-otelcol/socketSidecar/node_modules

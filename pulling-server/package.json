@@ -1,0 +1,16 @@
+{
+  "name": "pulling-server",
+  "version": "1.0.0",
+  "description": "server to pull telemetry from the otelcol inside k8s and push to gateway otelcol",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "roychshao",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5"
+  }
+}
