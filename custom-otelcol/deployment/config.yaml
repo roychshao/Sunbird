@@ -15,6 +15,16 @@ exporters:
     sending_queue:
       storage: file_storage
 
+  otlphttp:
+    endpoint: http://192.168.101.128:4318
+    tls:
+      insecure: true
+    headers:
+      Content-type: application/json
+    sending_queue:
+      storage: file_storage
+    encoding: json
+
 processors:
   batch:
   memory_limiter:
@@ -24,7 +34,7 @@ processors:
 
 extensions:
   file_storage:
-    directory: /app
+    directory: /var/lib/otelcol 
     timeout: 1s
     compaction:
       on_start: true
@@ -40,13 +50,13 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [debug, otlp]
+      exporters: [debug, otlphttp]
     metrics:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [debug, otlp]
+      exporters: [debug, otlphttp]
     logs:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [debug, otlp]
+      exporters: [debug, otlphttp]
 

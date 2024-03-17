@@ -14,19 +14,28 @@ spec:
       labels:
         app: otelcol-deployment
     spec:
+      volumes:
+      - name: app
+        emptyDir: {}
       containers:
       - name: otelcol-deployment
         image: roychshao/otelcol-deployment
         command: ["/app/custom-otelcol"]
         args: ["--config=/app/config.yaml"]
         ports:
-        - containerPort: 4317
+        - containerPort: 4318
+        volumeMounts:
+        - name: app
+          mountPath: /var/lib/otelcol
       - name: socket-sidecar
         image: roychshao/sunbird-socketsidecar
         command: ["node"]
         args: ["/app/index.js"]
         ports:
         - containerPort: 3000
+        volumeMounts:
+        - name: app
+          mountPath: /var/lib/otelcol
 ---
 
 apiVersion: v1
@@ -40,8 +49,8 @@ spec:
   ports:
     - name: otlp
       protocol: TCP
-      port: 4317
-      targetPort: 4317
+      port: 4318
+      targetPort: 4318
       nodePort: 30005
     - name: socket
       protocol: TCP

@@ -11,8 +11,9 @@ const io = socketIO(server);
 io.on('connection', (socket) => {
     console.log("connection build");
 
-    const tracesFilePath = path.join(__dirname, 'exporter_otlp__traces');
-    fs.readFile(tracesFilePath, 'utf8', (err, data) => {
+    const tracesFilePath = path.join('/var', 'lib', 'otelcol', 'exporter_otlp__traces');
+    fs.readFile(tracesFilePath, (err, data) => {
+        console.log('trace file path', tracesFilePath);
         if (err) {
             console.error('Error reading log file:', err);
             return;
@@ -23,8 +24,8 @@ io.on('connection', (socket) => {
         })
     })
 
-    const metricsFilePath = path.join(__dirname, 'exporter_otlp__metrics');
-    fs.readFile(metricsFilePath, 'utf8', (err, data) => {
+    const metricsFilePath = path.join('/var', 'lib', 'otelcol', 'exporter_otlp__metrics');
+    fs.readFile(metricsFilePath, (err, data) => {
         if (err) {
             console.error('Error reading log file:', err);
             return;
@@ -35,8 +36,8 @@ io.on('connection', (socket) => {
         })
     })
 
-    const logsFilePath = path.join(__dirname, 'exporter_otlp__logs');
-    fs.readFile(logsFilePath, 'utf8', (err, data) => {
+    const logsFilePath = path.join('/var', 'lib', 'otelcol', 'exporter_otlp__logs');
+    fs.readFile(logsFilePath, (err, data) => {
         if (err) {
             console.error('Error reading log file:', err);
             return;

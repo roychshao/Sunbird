@@ -22,4 +22,4 @@
 FROM ubuntu:22.04
 WORKDIR /app
 COPY ./custom-otelcol/custom-otelcol /app
-COPY ./custom-otelcol/config.yaml /app/config.yaml
+COPY ./config.yaml /app/config.yaml
