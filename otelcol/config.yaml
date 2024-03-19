@@ -34,6 +34,13 @@ exporters:
     endpoint: localhost:6000
     tls:
       insecure: true
+  
+  file/traces:
+    path: ./telemetry/traces.json
+  file/metrics:
+    path: ./telemetry/metrics.json
+  file/logs:
+    path: ./telemetry/logs.json
 
 processors:
   batch:
@@ -43,7 +50,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp]
+      exporters: [otlp, file/traces]
     traces/2:
       receivers: [otlp/2]
       processors: [batch]
@@ -51,7 +58,7 @@ service:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [prometheus]
+      exporters: [prometheus, file/metrics]
     metrics/2:
       receivers: [otlp/2]
       processors: [batch]
@@ -59,7 +66,7 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [loki]
+      exporters: [loki, file/logs]
     logs/2:
       receivers: [otlp/2]
       processors: [batch]

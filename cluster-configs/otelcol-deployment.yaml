@@ -23,7 +23,7 @@ spec:
         command: ["/app/custom-otelcol"]
         args: ["--config=/app/config.yaml"]
         ports:
-        - containerPort: 4318
+        - containerPort: 4317
         volumeMounts:
         - name: app
           mountPath: /var/lib/otelcol
@@ -49,8 +49,8 @@ spec:
   ports:
     - name: otlp
       protocol: TCP
-      port: 4318
-      targetPort: 4318
+      port: 4317
+      targetPort: 4317
       nodePort: 30005
     - name: socket
       protocol: TCP
