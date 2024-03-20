@@ -21,6 +21,11 @@ exporters:
       storage: file_storage
     encoding: json
 
+  file/no_rotation_metrics:
+    path: /tmp/otelcol/file_exporter/metrics.json
+  file/no_rotation_logs:
+    path: /tmp/otelcol/file_exporter/logs.json
+
 processors:
   batch:
   memory_limiter:
@@ -46,9 +51,9 @@ service:
     metrics:
       receivers: [k8s_cluster]
       processors: [batch, memory_limiter]
-      exporters: [otlphttp]
+      exporters: [otlphttp, file/no_rotation_metrics]
     logs:
       receivers: [k8s_cluster, k8s_events, k8sobjects]
       processors: [batch, memory_limiter]
-      exporters: [otlphttp]
+      exporters: [otlphttp, file/no_rotation_logs]
 

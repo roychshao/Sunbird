@@ -11,7 +11,9 @@ receivers:
         endpoint: 0.0.0.0:55690
       http:
         endpoint: 0.0.0.0:55691
-
+  otlpjsonfile:
+    include:
+      - "../../pulling-server/receivedData/*.json"
 
 exporters:
   loki:
@@ -36,11 +38,11 @@ exporters:
       insecure: true
   
   file/traces:
-    path: ./telemetry/traces.json
+    path: ./../telemetry/traces.json
   file/metrics:
-    path: ./telemetry/metrics.json
+    path: ./../telemetry/metrics.json
   file/logs:
-    path: ./telemetry/logs.json
+    path: ./../telemetry/logs.json
 
 processors:
   batch:
@@ -48,7 +50,7 @@ processors:
 service:
   pipelines:
     traces:
-      receivers: [otlp]
+      receivers: [otlp, otlpjsonfile]
       processors: [batch]
       exporters: [otlp, file/traces]
     traces/2:
@@ -56,7 +58,7 @@ service:
       processors: [batch]
       exporters: [otlp]
     metrics:
-      receivers: [otlp]
+      receivers: [otlp, otlpjsonfile]
       processors: [batch]
       exporters: [prometheus, file/metrics]
     metrics/2:
@@ -64,7 +66,7 @@ service:
       processors: [batch]
       exporters: [prometheus/2]
     logs:
-      receivers: [otlp]
+      receivers: [otlp, otlpjsonfile]
       processors: [batch]
       exporters: [loki, file/logs]
     logs/2:

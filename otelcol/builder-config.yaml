@@ -1,0 +1,37 @@
+dist:
+    module: github.com/open-telemetry/opentelemetry-collector
+    name: otelcol
+    description: "OpenTelemetry Custom Collector"
+    otelcol_version: "0.95.0"
+    output_path: "./otelcol"
+    version: "1.0.0"
+    go: "/home/roy/golang/go1.21.1/bin/go"
+    debug_compilation: false
+
+receivers:
+  # - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/dockerstatsreceiver v0.87.0"
+  #   import: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/dockerstatsreceiver"
+  - gomod: "go.opentelemetry.io/collector/receiver/otlpreceiver v0.95.0"
+    import: "go.opentelemetry.io/collector/receiver/otlpreceiver"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/otlpjsonfilereceiver v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/receiver/otlpjsonfilereceiver"
+
+processors:
+  - gomod: "go.opentelemetry.io/collector/processor/batchprocessor v0.95.0"
+    import: "go.opentelemetry.io/collector/processor/batchprocessor"
+
+exporters:
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/prometheusexporter v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/prometheusexporter"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/prometheusremotewriteexporter v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/prometheusremotewriteexporter"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/fileexporter"
+  - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/lokiexporter v0.95.0"
+    import: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/lokiexporter"
+  - gomod: "go.opentelemetry.io/collector/exporter/otlpexporter v0.95.0"
+    import: "go.opentelemetry.io/collector/exporter/otlpexporter"
+
+replaces:
+  # a list of "replaces" directives that will be part of the resulting go.mod 
+  - github.com/open-telemetry/opentelemetry-collector-contrib/internal/common => github.com/open-telemetry/opentelemetry-collector-contrib/internal/common v0.95.0

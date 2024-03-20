@@ -8,6 +8,7 @@ receivers:
 
 exporters:
   debug:
+
   otlp:
     endpoint: 192.168.101.128:4317
     tls:
@@ -24,6 +25,13 @@ exporters:
     sending_queue:
       storage: file_storage
     encoding: json
+
+  file/no_rotation_traces:
+    path: /tmp/otelcol/file_exporter/traces.json
+  file/no_rotation_metrics:
+    path: /tmp/otelcol/file_exporter/metrics.json
+  file/no_rotation_logs:
+    path: /tmp/otelcol/file_exporter/logs.json
 
 processors:
   batch:
@@ -50,13 +58,13 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [debug, otlphttp]
+      exporters: [debug, otlphttp, file/no_rotation_traces]
     metrics:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [debug, otlphttp]
+      exporters: [debug, otlphttp, file/no_rotation_metrics]
     logs:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [debug, otlphttp]
+      exporters: [debug, otlphttp, file/no_rotation_logs]
 

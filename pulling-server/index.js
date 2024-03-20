@@ -1,5 +1,5 @@
 const socketIOClient = require('socket.io-client');
-const socket = socketIOClient('http://10.98.108.84:3000');
+const socket = socketIOClient('http://10.98.102.49:3000');
 const fs = require('fs');
 const readline = require('readline');
 
@@ -24,35 +24,35 @@ socket.on('connect', () => {
 });
 
 socket.on('sendTraces', (traces) => {
-    console.log('Received traces.');
-    fs.writeFileSync('./receivedData/exporter_otlphttp__traces', traces, (err) => {
+    fs.writeFileSync('./receivedData/traces.json', traces, (err) => {
         if (err) {
             console.log(`Error writing traces to file: ${err}`);
         } else {
             console.log('Traces written to file successfully.');
         }
     });
+    console.log('Traces received.')
 });
 
 socket.on('sendMetrics', (metrics) => {
-    console.log('Received metrics.');
-    fs.writeFileSync('./receivedData/exporter_otlphttp__metrics', metrics, (err) => {
+    fs.writeFileSync('./receivedData/metrics.json', metrics, (err) => {
         if (err) {
             console.log(`Error writing metrics to file: ${err}`);
         } else {
             console.log('Metrics written to file successfully.');
         }
     })
+    console.log('Metrics received.');
 });
 
 socket.on('sendLogs', (logs) => {
-    console.log('Received logs.');
-    fs.writeFileSync('./receivedData/exporter_otlphttp__logs', logs, (err) => {
+    fs.writeFileSync('./receivedData/logs.json', logs, (err) => {
         if (err) {
             console.log(`Error writing logs to file: ${err}`);
         } else {
             console.log('Logs written to file successfully.');
         }
     })
+    console.log('Logs received.')
 });
 

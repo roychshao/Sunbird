@@ -10,3 +10,4 @@ ocb
 /custom-otelcol/socketSidecar/node_modules
 /pulling-server/receivedData
 /otelcol/telemetry
+/otelcol/otelcol

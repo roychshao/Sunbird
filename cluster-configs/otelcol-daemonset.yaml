@@ -14,8 +14,9 @@ spec:
         app: otelcol-daemonset
     spec:
       volumes:
-      - name: app
+      - name: file-storage
         emptyDir: {}
+      - name: file-exporter
       containers:
       - name: otelcol-daemonset
         image: roychshao/otelcol-daemonset
@@ -24,15 +25,19 @@ spec:
         ports:
         - containerPort: 4317
         volumeMounts:
-        - name: app
+        - name: file-storage
           mountPath: /var/lib/otelcol
+        - name: file-exporter
+          mountPath: /tmp/otelcol/file_exporter
       - name: socket-sidecar
         image: roychshao/sunbird-socketsidecar
         command: ["node"]
         args: ["/app/index.js"]
+        ports:
+        - containerPort: 3000
         volumeMounts:
-        - name: app
-          mountPath: /var/lib/otelcol
+        - name: file-exporter
+          mountPath: /tmp/otelcol/file_exporter
 
 
 ---
