@@ -1,0 +1,36 @@
+receivers:
+  traces_receiver:
+  metrics_receiver:
+  logs_receiver:
+
+exporters:
+  traces_exporter:
+  metrics_exporter:
+  logs_exporter:
+
+processors:
+  processor1:
+  processor2:
+
+extensions:
+  extension1:
+  extension2:
+
+service:
+  extensions: [extension1, extension2]
+  pipeline:
+    traces:
+      receivers: [traces_receiver]
+      processors: [processor1, processor2]
+      exporters: [traces_exporter]
+    metrics:
+      receivers: [metrics_receiver]
+      processors: [processor1, processor2]
+      exporters: [metrics_exporter]
+    logs:
+      receivers: [logs_receiver]
+      processors: [processor1, processor2]
+      exporters: [logs_exporter]
+
+
+

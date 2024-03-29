@@ -1,5 +1,5 @@
 const socketIOClient = require('socket.io-client');
-const socket = socketIOClient('http://10.98.102.49:3000');
+const socket = socketIOClient('http://10.96.20.33:3000');
 const fs = require('fs');
 const readline = require('readline');
 

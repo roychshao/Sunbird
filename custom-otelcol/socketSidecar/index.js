@@ -11,38 +11,40 @@ const io = socketIO(server);
 io.on('connection', (socket) => {
     console.log("connection build");
 
-    const tracesFilePath = path.join('/tmp', 'otelcol', 'file_exporter', 'traces.json');
-    fs.readFile(tracesFilePath, (err, data) => {
-        console.log('trace file path', tracesFilePath);
-        if (err) {
-            console.error('Error reading log file:', err);
-            return;
-        }
-        socket.on('requestTraces', () => {
+    socket.on('requestTraces', () => {
+        const tracesFilePath = path.join('/tmp', 'otelcol', 'file_exporter', 'traces.json');
+        fs.readFile(tracesFilePath, (err, data) => {
+            console.log('trace file path', tracesFilePath);
+            if (err) {
+                console.error('Error reading log file:', err);
+                return;
+            }
             console.log('Received request for traces');
             socket.emit('sendTraces', data);
         })
     })
 
-    const metricsFilePath = path.join('/tmp', 'otelcol', 'file_exporter', 'metrics.json');
-    fs.readFile(metricsFilePath, (err, data) => {
-        if (err) {
-            console.error('Error reading log file:', err);
-            return;
-        }
-        socket.on('requestMetrics', () => {
+    socket.on('requestMetrics', () => {
+        const metricsFilePath = path.join('/tmp', 'otelcol', 'file_exporter', 'metrics.json');
+        fs.readFile(metricsFilePath, (err, data) => {
+            if (err) {
+                console.error('Error reading log file:', err);
+                return;
+            }
+
             console.log('Received request for metrics');
             socket.emit('sendMetrics', data);
         })
     })
 
-    const logsFilePath = path.join('/tmp', 'otelcol', 'file_exporter', 'logs.json');
-    fs.readFile(logsFilePath, (err, data) => {
-        if (err) {
-            console.error('Error reading log file:', err);
-            return;
-        }
-        socket.on('requestLogs', () => {
+    socket.on('requestLogs', () => {
+        const logsFilePath = path.join('/tmp', 'otelcol', 'file_exporter', 'logs.json');
+        fs.readFile(logsFilePath, (err, data) => {
+            if (err) {
+                console.error('Error reading log file:', err);
+                return;
+            }
+
             console.log('Received request for logs');
             socket.emit('sendLogs', data);
         })
