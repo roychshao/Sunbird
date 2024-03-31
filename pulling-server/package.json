@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "server to pull telemetry from the otelcol inside k8s and push to gateway otelcol",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
