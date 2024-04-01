@@ -29,7 +29,12 @@ io.on('connection', (socket) => {
                     return false;
                 }
 
-                const fileTimestamp = match[1];
+                var fileTimestamp = match[1];
+                let count = 0;
+                fileTimestamp = fileTimestamp.replace(/-/g, function(match) {
+                    count++;
+                    return (count > 2) ? ":" : match;
+                });
                 return fileTimestamp > timestamp;
             });
             
@@ -67,7 +72,12 @@ io.on('connection', (socket) => {
                     return false;
                 }
 
-                const fileTimestamp = match[1];
+                var fileTimestamp = match[1];
+                let count = 0;
+                fileTimestamp = fileTimestamp.replace(/-/g, function(match) {
+                    count++;
+                    return (count > 2) ? ":" : match;
+                });
                 return fileTimestamp > timestamp;
             });
 
@@ -106,7 +116,12 @@ io.on('connection', (socket) => {
                     return false;
                 }
 
-                const fileTimestamp = match[1];
+                var fileTimestamp = match[1];
+                let count = 0;
+                fileTimestamp = fileTimestamp.replace(/-/g, function(match) {
+                    count++;
+                    return (count > 2) ? ":" : match;
+                });
                 return fileTimestamp > timestamp;
             });
 

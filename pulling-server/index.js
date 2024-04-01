@@ -1,5 +1,5 @@
 import socketIOClient from 'socket.io-client';
-const socket = socketIOClient('http://10.97.130.229:3000');
+const socket = socketIOClient('http://10.98.234.244:3000');
 import fs from 'fs';
 import readline from 'readline';
 import path from 'path';
@@ -30,21 +30,20 @@ socket.on('connect', () => {
 });
 
 socket.on('sendTraces', (data) => {
-    
+   
     tracesTimestamp = data.timestamp;
+    var file = data.file;
 
-    data.files.forEach(file => {
-        const fileContent = file.content;
-        const filePath = path.join('./receivedData/', file.name);
+    const fileContent = file.content;
+    const filePath = path.join('/receivedData/', file.name);
 
-        fs.writeFileSync(filePath, fileContent, (err) => {
-            if (err) {
-                console.error(`Failed to save file ${file.name}:`, err);
-            } else {
-                console.log(`File ${file.name} saved successfully.`);
-            }
-        })
-    });
+    fs.writeFileSync(filePath, fileContent, (err) => {
+        if (err) {
+            console.error(`Failed to save file ${file.name}:`, err);
+        } else {
+            console.log(`File ${file.name} saved successfully.`);
+        }
+    })
 });
 
 socket.on('sendMetrics', (data) => {
@@ -67,18 +66,17 @@ socket.on('sendMetrics', (data) => {
 socket.on('sendLogs', (data) => {
 
     logsTimestamp = data.timestamp;
+    var file = data.file;
 
-    data.files.forEach(file => {
-        const fileContent = file.content;
-        const filePath = path.join('./receivedData/', file.name);
+    const fileContent = file.content;
+    const filePath = path.join('./receivedData/', file.name);
 
-        fs.writeFileSync(filePath, fileContent, (err) => {
-            if (err) {
-                console.error(`Failed to save file ${file.name}:`, err);
-            } else {
-                console.log(`File ${file.name} saved successfully.`);
-            }
-        })
-    });
+    fs.writeFileSync(filePath, fileContent, (err) => {
+        if (err) {
+            console.error(`Failed to save file ${file.name}:`, err);
+        } else {
+            console.log(`File ${file.name} saved successfully.`);
+        }
+    })
 });
 
