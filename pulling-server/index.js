@@ -1,5 +1,5 @@
 import socketIOClient from 'socket.io-client';
-const socket = socketIOClient('http://10.103.7.125:3000');
+const socket = socketIOClient('http://10.97.130.229:3000');
 import fs from 'fs';
 import readline from 'readline';
 import path from 'path';
@@ -9,8 +9,6 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-// TODO: file format wrong, file.content and file.name undefined.
-// TODO: make the timestamp transmitted be little later
 
 var tracesTimestamp = new Date().getTime();
 var metricsTimestamp = new Date().toISOString();
@@ -20,13 +18,13 @@ socket.on('connect', () => {
   console.log('Connected to telemetry server');
   rl.on('line', (input) => {
     if (input === 'requestTraces') {
-      socket.emit('requestTraces', new Date().toISOString());
+      socket.emit('requestTraces', tracesTimestamp);
     }
     if (input === 'requestMetrics') {
-      socket.emit('requestMetrics', new Date().toISOString());
+      socket.emit('requestMetrics', metricsTimestamp);
     }
     if (input === 'requestLogs') {
-      socket.emit('requestLogs', new Date().toISOString());
+      socket.emit('requestLogs', logsTimestamp);
     }
   });
 });
@@ -36,7 +34,7 @@ socket.on('sendTraces', (data) => {
     tracesTimestamp = data.timestamp;
 
     data.files.forEach(file => {
-        const fileContent = Buffer.from(file.content, 'base64');
+        const fileContent = file.content;
         const filePath = path.join('./receivedData/', file.name);
 
         fs.writeFileSync(filePath, fileContent, (err) => {
@@ -47,44 +45,23 @@ socket.on('sendTraces', (data) => {
             }
         })
     });
-    // fs.writeFileSync('./receivedData/traces.json', traces, (err) => {
-    //     if (err) {
-    //         console.log(`Error writing traces to file: ${err}`);
-    //     } else {
-    //         console.log('Traces written to file successfully.');
-    //     }
-    // });
-    // console.log('Traces received.')
 });
 
 socket.on('sendMetrics', (data) => {
   
-    console.log("receive sendMetrics response");
-    console.log(data);
     metricsTimestamp = data.timestamp;
+    var file = data.file;
 
-    data.files.forEach(file => {
-        console.log(file);
-        const fileContent = Buffer.from(file.content, 'base64');
-        const filePath = path.join('./receivedData/', file.name);
+    const fileContent = file.content;
+    const filePath = path.join('./receivedData/', file.name);
 
-        fs.writeFileSync(filePath, fileContent, (err) => {
-            if (err) {
-                console.error(`Failed to save file ${file.name}:`, err);
-            } else {
-                console.log(`File ${file.name} saved successfully.`);
-            }
-        })
-    });
-
-    // fs.writeFileSync('./receivedData/metrics.json', metrics, (err) => {
-    //     if (err) {
-    //         console.log(`Error writing metrics to file: ${err}`);
-    //     } else {
-    //         console.log('Metrics written to file successfully.');
-    //     }
-    // })
-    // console.log('Metrics received.');
+    fs.writeFileSync(filePath, fileContent, (err) => {
+        if (err) {
+            console.error(`Failed to save file ${file.name}:`, err);
+        } else {
+            console.log(`File ${file.name} saved successfully.`);
+        }
+    })
 });
 
 socket.on('sendLogs', (data) => {
@@ -92,7 +69,7 @@ socket.on('sendLogs', (data) => {
     logsTimestamp = data.timestamp;
 
     data.files.forEach(file => {
-        const fileContent = Buffer.from(file.content, 'base64');
+        const fileContent = file.content;
         const filePath = path.join('./receivedData/', file.name);
 
         fs.writeFileSync(filePath, fileContent, (err) => {
@@ -103,14 +80,5 @@ socket.on('sendLogs', (data) => {
             }
         })
     });
-
-    // fs.writeFileSync('./receivedData/logs.json', logs, (err) => {
-    //     if (err) {
-    //         console.log(`Error writing logs to file: ${err}`);
-    //     } else {
-    //         console.log('Logs written to file successfully.');
-    //     }
-    // })
-    // console.log('Logs received.')
 });
 

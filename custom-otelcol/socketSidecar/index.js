@@ -32,23 +32,19 @@ io.on('connection', (socket) => {
                 const fileTimestamp = match[1];
                 return fileTimestamp > timestamp;
             });
-            // emit with timestamp
-            socket.emit('sendTraces', {
-                files: filteredFiles,
-                timestamp: new Date().toISOString()
-            });
+            
+            // read file
+            filteredFiles.forEach(file => {
+                const fileContent = fs.readFileSync(path.join(directoryPath, file), 'utf8');
+                socket.emit('sendTraces', {
+                    file: {
+                        name: file,
+                        content: fileContent,
+                    },
+                    timestamp: new Date().toISOString(),
+                })
+            })
         })
-
-        // const tracesFilePath = path.join('/tmp', 'otelcol', 'file_exporter', 'traces.json');
-        // fs.readFile(tracesFilePath, (err, data) => {
-        //     console.log('trace file path', tracesFilePath);
-        //     if (err) {
-        //         console.error('Error reading log file:', err);
-        //         return;
-        //     }
-        //     console.log('Received request for traces');
-        //     socket.emit('sendTraces', data);
-        // })
     })
 
     socket.on('requestMetrics', (timestamp) => {
@@ -74,24 +70,22 @@ io.on('connection', (socket) => {
                 const fileTimestamp = match[1];
                 return fileTimestamp > timestamp;
             });
-            // emit with timestamp
-            console.log("filter process finished, start emitting...");
-            console.log(filteredFiles);
-            socket.emit('sendTraces', {
-                files: filteredFiles,
-                timestamp: new Date().toISOString()
-            });
+
+            console.log("filteredFiles are: ", filteredFiles);
+            // read file
+            filteredFiles.forEach(file => {
+                const fileContent = fs.readFileSync(path.join(directoryPath, file), 'utf8');
+                console.log("start emitting: ", file);
+                console.log("content: ", fileContent);
+                socket.emit('sendMetrics', {
+                    file: {
+                        name: file,
+                        content: fileContent,
+                    },
+                    timestamp: new Date().toISOString(),
+                })
+            })
         })
-        // const metricsFilePath = path.join('/tmp', 'otelcol', 'file_exporter', 'metrics.json');
-        // fs.readFile(metricsFilePath, (err, data) => {
-        //     if (err) {
-        //         console.error('Error reading log file:', err);
-        //         return;
-        //     }
-        //
-        //     console.log('Received request for metrics');
-        //     socket.emit('sendMetrics', data);
-        // })
     })
 
     socket.on('requestLogs', (timestamp) => {
@@ -115,23 +109,19 @@ io.on('connection', (socket) => {
                 const fileTimestamp = match[1];
                 return fileTimestamp > timestamp;
             });
-            // emit with timestamp
-            socket.emit('sendTraces', {
-                files: filteredFiles,
-                timestamp: new Date().toISOString()
-            });
-        })
 
-        // const logsFilePath = path.join('/tmp', 'otelcol', 'file_exporter', 'logs.json');
-        // fs.readFile(logsFilePath, (err, data) => {
-        //     if (err) {
-        //         console.error('Error reading log file:', err);
-        //         return;
-        //     }
-        //
-        //     console.log('Received request for logs');
-        //     socket.emit('sendLogs', data);
-        // })
+            // read file
+            filteredFiles.forEach(file => {
+                const fileContent = fs.readFileSync(path.join(directoryPath, file), 'utf8');
+                socket.emit('sendLogs', {
+                    file: {
+                        name: file,
+                        content: fileContent,
+                    },
+                    timestamp: new Date().toISOString(),
+                })
+            })
+        })
     })
 });
 
