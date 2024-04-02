@@ -35,6 +35,8 @@ io.on('connection', (socket) => {
                     count++;
                     return (count > 2) ? ":" : match;
                 });
+
+                // return only the files that timestamp later then the requested timestamp
                 return fileTimestamp > timestamp;
             });
             
@@ -54,8 +56,6 @@ io.on('connection', (socket) => {
 
     socket.on('requestMetrics', (timestamp) => {
 
-        console.log("receive requestMetrics request");
-        console.log("timestamp: " + timestamp);
         const directoryPath = path.join('/tmp', 'otelcol/file_exporter');
         fs.readdir(directoryPath, (err, files) => {
             if (err) {
@@ -78,15 +78,14 @@ io.on('connection', (socket) => {
                     count++;
                     return (count > 2) ? ":" : match;
                 });
+                
+                // return only the files that timestamp later then the requested timestamp
                 return fileTimestamp > timestamp;
             });
 
-            console.log("filteredFiles are: ", filteredFiles);
             // read file
             filteredFiles.forEach(file => {
                 const fileContent = fs.readFileSync(path.join(directoryPath, file), 'utf8');
-                console.log("start emitting: ", file);
-                console.log("content: ", fileContent);
                 socket.emit('sendMetrics', {
                     file: {
                         name: file,
@@ -122,6 +121,8 @@ io.on('connection', (socket) => {
                     count++;
                     return (count > 2) ? ":" : match;
                 });
+
+                // return only the files that timestamp later then the requested timestamp
                 return fileTimestamp > timestamp;
             });
 
