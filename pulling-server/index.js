@@ -40,7 +40,7 @@ getServiceIP().then((serviceIP) => {
         console.log('Connected to telemetry server');
         rl.on('line', (input) => {
             if (input === 'requestTraces') {
-                socket.emit('requestTraces', tacesTimestamp);
+                socket.emit('requestTraces', tracesTimestamp);
             }
             if (input === 'requestMetrics') {
                 socket.emit('requestMetrics', metricsTimestamp);

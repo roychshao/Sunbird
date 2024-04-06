@@ -26,19 +26,19 @@ exporters:
       storage: file_storage
     encoding: json
 
-  file/no_rotation_traces:
+  file/rotation_traces:
     path: /tmp/otelcol/file_exporter/traces.json
     rotation:
       max_megabytes: 1
       max_days: 1
       localtime: true
-  file/no_rotation_metrics:
+  file/rotation_metrics:
     path: /tmp/otelcol/file_exporter/metrics.json
     rotation:
       max_megabytes: 1
       max_days: 1
       localtime: true
-  file/no_rotation_logs:
+  file/rotation_logs:
     path: /tmp/otelcol/file_exporter/logs.json
     rotation:
       max_megabytes: 1
@@ -70,13 +70,13 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [debug, otlphttp, file/no_rotation_traces]
+      exporters: [debug, otlp, file/rotation_traces]
     metrics:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [debug, otlphttp, file/no_rotation_metrics]
+      exporters: [debug, otlp, file/rotation_metrics]
     logs:
       receivers: [otlp]
       processors: [batch, memory_limiter]
-      exporters: [debug, otlphttp, file/no_rotation_logs]
+      exporters: [debug, otlp, file/rotation_logs]
 

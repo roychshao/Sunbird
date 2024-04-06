@@ -59,9 +59,9 @@ service:
     metrics:
       receivers: [k8s_cluster]
       processors: [batch, memory_limiter]
-      exporters: [otlphttp, file/no_rotation_metrics]
+      exporters: [otlp, file/no_rotation_metrics]
     logs:
       receivers: [k8s_cluster, k8s_events, k8sobjects]
       processors: [batch, memory_limiter]
-      exporters: [otlphttp, file/no_rotation_logs]
+      exporters: [otlp, file/no_rotation_logs]
 

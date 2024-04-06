@@ -50,7 +50,7 @@ processors:
 service:
   pipelines:
     traces:
-      receivers: [otlpjsonfile]
+      receivers: [otlp]
       processors: [batch]
       exporters: [otlp, file/traces]
     traces/2:
@@ -58,7 +58,7 @@ service:
       processors: [batch]
       exporters: [otlp]
     metrics:
-      receivers: [otlpjsonfile]
+      receivers: [otlp]
       processors: [batch]
       exporters: [prometheus, file/metrics]
     metrics/2:
@@ -66,7 +66,7 @@ service:
       processors: [batch]
       exporters: [prometheus/2]
     logs:
-      receivers: [otlpjsonfile]
+      receivers: [otlp]
       processors: [batch]
       exporters: [loki, file/logs]
     logs/2:
