@@ -31,7 +31,7 @@ getServiceIP().then((serviceIP) => {
     });
 
     // initialized timestamp with now
-    var tracesTimestamp = new Date().getTime();
+    var tracesTimestamp = new Date().toISOString();
     var metricsTimestamp = new Date().toISOString();
     var logsTimestamp = new Date().toISOString();
 

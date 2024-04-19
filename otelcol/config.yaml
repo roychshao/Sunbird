@@ -32,17 +32,24 @@ exporters:
     resource_to_telemetry_conversion:
       enabled: true
 
-  otlp:
+  otlp: # jaeger
     endpoint: localhost:6000
     tls:
       insecure: true
   
-  file/traces:
-    path: ./../telemetry/traces.json
-  file/metrics:
-    path: ./../telemetry/metrics.json
-  file/logs:
-    path: ./../telemetry/logs.json
+  file/traces-amd64:
+    path: ./../localTelemetry/traces.json
+  file/metrics-amd64:
+    path: ./../localTelemetry/metrics.json
+  file/logs-amd64:
+    path: ./../localTelemetry/logs.json
+  file/traces-arm64:
+    path: ./../remoteTelemetry/traces.json
+  file/metrics-arm64:
+    path: ./../remoteTelemetry/metrics.json
+  file/logs-arm64:
+    path: ./../remoteTelemetry/logs.json
+
 
 processors:
   batch:
@@ -52,25 +59,25 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp, file/traces]
+      exporters: [otlp, file/traces-amd64]
     traces/2:
       receivers: [otlp/2]
       processors: [batch]
-      exporters: [otlp]
+      exporters: [otlp, file/traces-arm64]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [prometheus, file/metrics]
+      exporters: [prometheus, file/metrics-amd64]
     metrics/2:
       receivers: [otlp/2]
       processors: [batch]
-      exporters: [prometheus/2]
+      exporters: [prometheus/2, file/metrics-arm64]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [loki, file/logs]
+      exporters: [loki, file/logs-amd64]
     logs/2:
       receivers: [otlp/2]
       processors: [batch]
-      exporters: [loki/2]
+      exporters: [loki/2, file/logs-arm64]
 

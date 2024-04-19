@@ -6,9 +6,10 @@ ocb
 /custom-otelcol/deployment/custom-otelcol
 /custom-otelcol/daemonset/custom-otelcol
 /node_modules
-/pulling-server/node_modules
+/socketClient/node_modules
 /custom-otelcol/socketSidecar/node_modules
-/pulling-server/receivedData
-/otelcol/telemetry
+/socketClient/receivedData
+/otelcol/localTelemetry
+/otelcol/remoteTelemetry
 /otelcol/otelcol
 /.settings
