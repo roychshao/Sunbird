@@ -1,0 +1,45 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+
+exporters:
+
+  file/rotation_traces:
+    path: /tmp/otelcol/file_exporter/traces.json
+    rotation:
+      max_megabytes: 1
+      max_days: 1
+      localtime: true
+  file/rotation_metrics:
+    path: /tmp/otelcol/file_exporter/metrics.json
+    rotation:
+      max_megabytes: 1
+      max_days: 1
+      localtime: true
+  file/rotation_logs:
+    path: /tmp/otelcol/file_exporter/logs.json
+    rotation:
+      max_megabytes: 1
+      max_days: 1
+      localtime: true
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [file/rotation_traces]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [file/rotation_metrics]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [file/rotation_logs]
+

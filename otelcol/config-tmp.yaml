@@ -1,11 +1,11 @@
 receivers:
-  otlp:
+  otlp/local: # local
     protocols:
       grpc:
         endpoint: 0.0.0.0:4317
       http:
         endpoint: 0.0.0.0:4318
-  otlp/2:
+  otlp/remote: # remote
     protocols:
       grpc:
         endpoint: 0.0.0.0:55690
@@ -13,27 +13,11 @@ receivers:
         endpoint: 0.0.0.0:55691
 
 exporters:
-  loki:
-    endpoint: "http://localhost:3100/loki-amd64/api/v1/push"
-
-  loki/2:
-    endpoint: "http://localhost:3100/loki-arm64/api/v1/push"
-
-  prometheus:
-    endpoint: localhost:9404
-    resource_to_telemetry_conversion:
-      enabled: true
-  
-  prometheus/2:
-    endpoint: localhost:9405
-    resource_to_telemetry_conversion:
-      enabled: true
 
   otlp: # jaeger
     endpoint: localhost:6000
     tls:
       insecure: true
-  
   file/localTraces:
     path: ./../localTelemetry/traces.json
   file/localMetrics:
@@ -47,34 +31,34 @@ exporters:
   file/remoteLogs:
     path: ./../remoteTelemetry/logs.json
 
-
 processors:
   batch:
 
 service:
   pipelines:
-    traces:
-      receivers: [otlp]
+    # local telemetry pipeline
+    traces/local:
+      receivers: [otlp/local]
       processors: [batch]
-      exporters: [otlp, file/localTraces]
-    traces/2:
-      receivers: [otlp/2]
+      exporters: [otlp, file/localTraces] 
+    metrics/local:
+      receivers: [otlp/local]
       processors: [batch]
-      exporters: [otlp, file/remoteTraces]
-    metrics:
-      receivers: [otlp]
+      exporters: [otlp, file/localMetrics]
+    logs/local:
+      receivers: [otlp/local]
       processors: [batch]
-      exporters: [prometheus, file/localMetrics]
-    metrics/2:
-      receivers: [otlp/2]
+      exporters: [otlp, file/localLogs]
+    # remote telemetry pipeline
+    traces/remote:
+      receivers: [otlp/remote]
       processors: [batch]
-      exporters: [prometheus/2, file/remoteMetrics]
-    logs:
-      receivers: [otlp]
+      exporters: [otlp, file/remoteTraces] 
+    metrics/remote:
+      receivers: [otlp/remote]
       processors: [batch]
-      exporters: [loki, file/localLogs]
-    logs/2:
-      receivers: [otlp/2]
+      exporters: [otlp, file/remoteMetrics]
+    logs/remote:
+      receivers: [otlp/remote]
       processors: [batch]
-      exporters: [loki/2, file/remoteLogs]
-
+      exporters: [otlp, file/remoteLogs]

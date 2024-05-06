@@ -16,16 +16,6 @@ exporters:
     sending_queue:
       storage: file_storage
 
-  otlphttp:
-    endpoint: http://192.168.43.182:4318
-    tls:
-      insecure: true
-    headers:
-      Content-type: application/json
-    sending_queue:
-      storage: file_storage
-    encoding: json
-
   file/rotation_traces:
     path: /tmp/otelcol/file_exporter/traces.json
     rotation:
