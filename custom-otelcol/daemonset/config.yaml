@@ -8,60 +8,18 @@ exporters:
     endpoint: 192.168.43.182:4317
     tls:
       insecure: true
-    sending_queue:
-      storage: file_storage
-  
-  otlphttp:
-    endpoint: http://192.168.43.182:4318
-    tls:
-      insecure: true
-    headers:
-      Content-type: application/json
-    sending_queue:
-      storage: file_storage
-    encoding: json
-
-  file/no_rotation_metrics:
-    path: /tmp/otelcol/file_exporter/metrics.json
-    rotation:
-      max_megabytes: 1
-      max_days: 1
-      localtime: true
-  file/no_rotation_logs:
-    path: /tmp/otelcol/file_exporter/logs.json
-    rotation:
-      max_megabytes: 1
-      max_days: 1
-      localtime: true
 
 processors:
   batch:
-  memory_limiter:
-    check_interval: 1s
-    limit_mib: 4000
-    spike_limit_mib: 800
-
-extensions:
-  file_storage:
-    directory: /var/lib/otelcol
-    timeout: 1s
-    compaction:
-      on_start: true
-      directory: /tmp/
-      max_transaction_size: 65_536
-    fsync: false
-  health_check:
-  memory_ballast:
 
 service:
-  extensions: [file_storage, health_check, memory_ballast]
   pipelines:
     metrics:
       receivers: [k8s_cluster]
-      processors: [batch, memory_limiter]
-      exporters: [otlp, file/no_rotation_metrics]
+      processors: [batch]
+      exporters: [otlp]
     logs:
       receivers: [k8s_cluster, k8s_events, k8sobjects]
-      processors: [batch, memory_limiter]
-      exporters: [otlp, file/no_rotation_logs]
+      processors: [batch]
+      exporters: [otlp]
 

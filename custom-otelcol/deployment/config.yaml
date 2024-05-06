@@ -3,8 +3,6 @@ receivers:
     protocols:
       grpc:
         endpoint: 0.0.0.0:4317
-      http:
-        endpoint: 0.0.0.0:4318
 
 exporters:
   debug:
@@ -13,60 +11,22 @@ exporters:
     endpoint: 192.168.43.182:4317
     tls:
       insecure: true
-    sending_queue:
-      storage: file_storage
-
-  file/rotation_traces:
-    path: /tmp/otelcol/file_exporter/traces.json
-    rotation:
-      max_megabytes: 1
-      max_days: 1
-      localtime: true
-  file/rotation_metrics:
-    path: /tmp/otelcol/file_exporter/metrics.json
-    rotation:
-      max_megabytes: 1
-      max_days: 1
-      localtime: true
-  file/rotation_logs:
-    path: /tmp/otelcol/file_exporter/logs.json
-    rotation:
-      max_megabytes: 1
-      max_days: 1
-      localtime: true
 
 processors:
   batch:
-  memory_limiter:
-    check_interval: 1s
-    limit_mib: 4000
-    spike_limit_mib: 800
-
-extensions:
-  file_storage:
-    directory: /var/lib/otelcol 
-    timeout: 1s
-    compaction:
-      on_start: true
-      directory: /tmp/
-      max_transaction_size: 65_536
-    fsync: false
-  health_check:
-  memory_ballast:
 
 service:
-  extensions: [file_storage, health_check, memory_ballast]
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch, memory_limiter]
-      exporters: [debug, otlp, file/rotation_traces]
+      processors: [batch]
+      exporters: [otlp]
     metrics:
       receivers: [otlp]
-      processors: [batch, memory_limiter]
-      exporters: [debug, otlp, file/rotation_metrics]
+      processors: [batch]
+      exporters: [otlp]
     logs:
       receivers: [otlp]
-      processors: [batch, memory_limiter]
-      exporters: [debug, otlp, file/rotation_logs]
+      processors: [batch]
+      exporters: [otlp]
 
