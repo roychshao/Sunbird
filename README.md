@@ -14,12 +14,11 @@
 .
 +-- cluster-configs (Cluster configuration Yaml files) 
 +-- custom-otelcol (custom collectors which deployed inside the cluster)
-+-- grafanaloki (Grafana docker compose file)
 +-- jpetstore-6
 +-- mysql (dockerfile for mysql)
 +-- otelcol (Opentelemetry Collector)
-+-- prometheus-2.47.0 (Prometheus)
 +-- record
++-- tomcat
 +-- delete.sh
 +-- deploy.sh
 +-- README.md
@@ -27,4 +26,6 @@
 
 ## Run
 * same with master branch
-If you want to see how resilient telemetry delivery solution works, please reference https://youtu.be/SLh5qw-7hXs
+
+## Demo
+please see https://youtu.be/SLh5qw-7hXs
