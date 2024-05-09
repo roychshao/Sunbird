@@ -37,3 +37,6 @@ requestLogs
 ```
 * if there are telemetry in the cluster, you will be able to see them in the ./socketClient/receivedData
 * you may need to run ***npm install*** and create a ./socketClient/receivedData directory in advance
+
+## Demo
+please see https://youtu.be/mWg0liew6-Y
