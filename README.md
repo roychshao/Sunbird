@@ -14,12 +14,11 @@
 .
 +-- cluster-configs (Cluster configuration Yaml files) 
 +-- custom-otelcol (custom collectors which deployed inside the cluster)
-+-- grafanaloki (Grafana docker compose file)
 +-- jpetstore-6
 +-- mysql (dockerfile for mysql)
 +-- otelcol (Opentelemetry Collector)
-+-- prometheus-2.47.0 (Prometheus)
 +-- record
++-- tomcat
 +-- delete.sh
 +-- deploy.sh
 +-- README.md
