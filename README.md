@@ -7,19 +7,24 @@
 - Minikube to simulate a kubernetes cluster
 
 ## Architechture
-![architechture](./record/Sunbird-Opentelemetry-Arch.png)
+* Push style
+![Push style architechture](./record/Sunbird-OpenTelemetry-push.png)
+* Pull style
+![Pull style architechture](./record/Sunbird-Opentelemetry-pull.png)
 
 ## Directory
 ```
 .
-+-- cluster-configs (Cluster configuration Yaml files) 
++-- cluster-configs (Cluster configuration Yaml files)
++-- custom-otelcol
 +-- grafanaloki (Grafana docker compose file)
 +-- jpetstore-6
-+-- open-telemetry (Opentelemetry helm charts for support in kubernetes)
++-- mysql
 +-- otelcol (Opentelemetry Collector)
 +-- prometheus-2.47.0 (Prometheus)
 +-- record
-|   +-- Sunbird-Opentelemetry-Arch.png
++-- socketClient
++-- tomcat
 +-- delete.sh
 +-- deploy.sh
 +-- README.md
@@ -28,20 +33,18 @@
 ## Requirements
 - Minikube
 - Docker (with user in the group 'docker', it is the requirement to run minikube with docker engine)
-- Helm ( to run Opentelemetry charts)
 - Prometheus (Download from https://prometheus.io/download/)
+- go (for build gateway otelcol)
 
 ## How to run
 
-First of all, we do not recommend you to try to run the cluster on your node because of its complexity, but if you really want to run the cluster, follow the steps below.
 - ### Clone
 ```
 git clone https://github.com/roychshao/Sunbird.git
 ```
 
-
 - ### Modify ./deploy.sh in the root of this directory
-> we use environment variable to replace the cluster configs. So make sure you have <font style="background: #ADADAD; color: #FFFFFF"> envsubst </font>, if not, see <a>https://command-not-found.com/envsubst</a> and install it.
+> we use environment variable to replace the cluster configs.
 
 in my dockerhub: roychshao, there are two docker images built on amd-64 and arm-64 systems, if your system is the same architechture with these two, just modify image name, else, you have two rebuild docker image in /tomcat directory and modify DOCKERHUB_USERNAME to yours.
 ```
@@ -50,17 +53,14 @@ export IMAGE_NAME=sunbird-ap-amd64 (sunbird-ap-arm64 or yours)
 export MYSQL_ADDR=<your ip address>
 ```
 
-- ### you have to build the custom collector with opentelemetry collector builder again.
+- ### Run Gateway OTelCol
 ```
-download the ocb from https://opentelemetry.io/docs/collector/custom-collector/, please download the 0.95.0 version
-copy it to ./custom-otelcol and build the custom-otelcol with ocb
-vim ./deployment/config.yaml // modify exporters.otlp.endpoint to where your gateway otelcol on
-copy ./deployment/config.yaml to the ./custom-otelcol/deployment/custom-otelcol
-vim ./daemonset/config.yaml // modify exporters.otlp.endpoint to where your gateway otelcol on
-copy ./daemonset/config.yaml to the ./custom-otelcol/daemonset/custom-otelcol
+cd ./otelcol
+(download ocb 0.95.0 from OpenTelemetry doc to here)
+./ocb --config=builder-config.yaml
+cd otelcol
+./otelcol --config=./../config.yaml
 ```
-docker build and tag it and modify ./cluster-configs/otelcol-deployment.yaml and ./cluster-configs/otelcol-daemonset.yaml  
-modify spec.template.spec.containers.image to your image name.  
 
 - ### Running observability backends
 in this step, you may need to open several terminals for each backend
@@ -95,12 +95,11 @@ docker run -d --name jaeger \
   -p 9411:9411 \
   jaegertracing/all-in-one:1.48
 ```
-
-- Opentelemetry Collector
+- File
 ```
 cd otelcol
-./otelcol --config=config.yaml
 ```
+and you can see the telemetry files under localTelemtry
 
 - ### Start Minikube
 ```
