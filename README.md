@@ -1,122 +1,39 @@
-# Sunbird-OpenTelemetry
+# Sunbird-OpenTelemetry (pull)
 
 ## Objective
-> Obtain observability of an application running in kubernetes environment while accessing an externel MySQL with OpenTelemetry and some observability backend.
+> The pull style solution for Sunbird-OpenTelemetry
 
 - take <a href="https://github.com/mybatis/jpetstore-6">jpetstore</a> as application
 - Minikube to simulate a kubernetes cluster
 
 ## Architechture
-![architechture](./record/Sunbird-Opentelemetry-Arch.png)
+![architechture](./record/Sunbird-OpenTelemetry-pull.png)
 
 ## Directory
 ```
-.
 +-- cluster-configs (Cluster configuration Yaml files) 
-+-- grafanaloki (Grafana docker compose file)
++-- custom-otelcol (custom collectors which deployed inside the cluster)
 +-- jpetstore-6
-+-- open-telemetry (Opentelemetry helm charts for support in kubernetes)
++-- mysql (dockerfile for mysql)
 +-- otelcol (Opentelemetry Collector)
-+-- prometheus-2.47.0 (Prometheus)
 +-- record
-|   +-- Sunbird-Opentelemetry-Arch.png
++-- socketClient
 +-- delete.sh
 +-- deploy.sh
 +-- README.md
 ```
 
-## Requirements
-- Minikube
-- Docker (with user in the group 'docker', it is the requirement to run minikube with docker engine)
-- Helm ( to run Opentelemetry charts)
-- Prometheus (Download from https://prometheus.io/download/)
-
-## How to run
-
-First of all, we do not recommend you to try to run the cluster on your node because of its complexity, but if you really want to run the cluster, follow the steps below.
-- ### Clone
+## Run
+* After you launch the cluster, you can run run the socketClient to actively pull telemetry from the cluster
 ```
-git clone https://github.com/roychshao/Sunbird.git
+cd socketClient
+node index.js
 ```
-
-
-- ### Modify ./deploy.sh in the root of this directory
-> we use environment variable to replace the cluster configs. So make sure you have <font style="background: #ADADAD; color: #FFFFFF"> envsubst </font>, if not, see <a>https://command-not-found.com/envsubst</a> and install it.
-
-in my dockerhub: roychshao, there are two docker images built on amd-64 and arm-64 systems, if your system is the same architechture with these two, just modify image name, else, you have two rebuild docker image in /tomcat directory and modify DOCKERHUB_USERNAME to yours.
+* and then, send messages like below to request for telemetry
 ```
-export DOCKERHUB_USERNAME=roychshao // if your system architechture is amd-64 or arm-64
-export IMAGE_NAME=sunbird-ap-amd64 (sunbird-ap-arm64 or yours)
-export MYSQL_ADDR=<your ip address>
+requestTraces
+requestMetrics
+requestLogs
 ```
-
-- ### you have to build the custom collector with opentelemetry collector builder again.
-```
-download the ocb from https://opentelemetry.io/docs/collector/custom-collector/, please download the 0.95.0 version
-copy it to ./custom-otelcol and build the custom-otelcol with ocb
-vim ./deployment/config.yaml // modify exporters.otlp.endpoint to where your gateway otelcol on
-copy ./deployment/config.yaml to the ./custom-otelcol/deployment/custom-otelcol
-vim ./daemonset/config.yaml // modify exporters.otlp.endpoint to where your gateway otelcol on
-copy ./daemonset/config.yaml to the ./custom-otelcol/daemonset/custom-otelcol
-```
-docker build and tag it and modify ./cluster-configs/otelcol-deployment.yaml and ./cluster-configs/otelcol-daemonset.yaml  
-modify spec.template.spec.containers.image to your image name.  
-
-- ### Running observability backends
-in this step, you may need to open several terminals for each backend
-
-- Prometheus:  
-> use ./prometheus-2.47.0/prometheus.yml to executes downloaded prometheus binary file
-```
-./prometheus --config.file=prometheus.yml
-```
-
-- Grafana loki
-```
-cd ./grafanaloki
-docker compose up -d
-```
-don't forget to add loki datasource in grafana and set endpoint to http://loki:3100
-
-- Jaeger
-```
-docker run -d --name jaeger \
-  -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 \
-  -e COLLECTOR_OTLP_ENABLED=true \
-  -p 6831:6831/udp \
-  -p 6832:6832/udp \
-  -p 5778:5778 \
-  -p 16686:16686 \
-  -p 4317:6000 \
-  -p 4318:6001 \
-  -p 14250:14250 \
-  -p 14268:14268 \
-  -p 14269:14269 \
-  -p 9411:9411 \
-  jaegertracing/all-in-one:1.48
-```
-
-- Opentelemetry Collector
-```
-cd otelcol
-./otelcol --config=config.yaml
-```
-
-- ### Start Minikube
-```
-minikube start
-./deploy.sh
-minikube service tomcat-service
-```
-
-Now the cluster is finished and you can visit them with browser.  
-Jpetstore: by minikube service  
-Jaeger: http://localhost:16686  
-Prometheus: http://localhost:9090  
-Grafana: http://localhost:3000  
-
-Finally, close the cluster by
-```
-./delete.sh
-minikube stop
-```
+* if there are telemetry in the cluster, you will be able to see them in the ./socketClient/receivedData
+* you may need to run ***npm install*** and create a ./socketClient/receivedData directory in advance
