@@ -5,14 +5,14 @@ receivers:
 
 exporters:
   
-  file/no_rotation_metrics:
-    path: /tmp/otelcol/file_exporter/metrics.json
+  file/rotation_metrics:
+    path: /tmp/otelcol/file_exporter/daemonset/metrics.json
     rotation:
       max_megabytes: 1
       max_days: 1
       localtime: true
-  file/no_rotation_logs:
-    path: /tmp/otelcol/file_exporter/logs.json
+  file/rotation_logs:
+    path: /tmp/otelcol/file_exporter/daemonset/logs.json
     rotation:
       max_megabytes: 1
       max_days: 1
@@ -37,9 +37,9 @@ service:
     metrics:
       receivers: [k8s_cluster]
       processors: [batch]
-      exporters: [file/no_rotation_metrics]
+      exporters: [file/rotation_metrics]
     logs:
       receivers: [k8s_cluster, k8s_events, k8sobjects]
       processors: [batch]
-      exporters: [file/no_rotation_logs]
+      exporters: [file/rotation_logs]
 

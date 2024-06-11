@@ -8,19 +8,19 @@ exporters:
   debug:
 
   file/rotation_traces:
-    path: /tmp/otelcol/file_exporter/traces.json
+    path: /tmp/otelcol/file_exporter/deployment/traces.json
     rotation:
       max_megabytes: 1
       max_days: 1
       localtime: true
   file/rotation_metrics:
-    path: /tmp/otelcol/file_exporter/metrics.json
+    path: /tmp/otelcol/file_exporter/deployment/metrics.json
     rotation:
       max_megabytes: 1
       max_days: 1
       localtime: true
   file/rotation_logs:
-    path: /tmp/otelcol/file_exporter/logs.json
+    path: /tmp/otelcol/file_exporter/deployment/logs.json
     rotation:
       max_megabytes: 1
       max_days: 1
