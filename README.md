@@ -43,6 +43,11 @@
 git clone https://github.com/roychshao/Sunbird.git
 ```
 
+- ### Modify the endpoint in the config.yaml of the otelcol
+First, the config.yaml under /otelcol and /custom-otelcol should be modified.  
+Second, build with docker file, upload to your dockerhub.
+Last, use the docker image of yours. you can modify the files under cluster-configs.
+
 - ### Modify ./deploy.sh in the root of this directory
 > we use environment variable to replace the cluster configs.
 
@@ -52,6 +57,7 @@ export DOCKERHUB_USERNAME=roychshao // if your system architechture is amd-64 or
 export IMAGE_NAME=sunbird-ap-amd64 (sunbird-ap-arm64 or yours)
 export MYSQL_ADDR=<your ip address>
 ```
+
 
 - ### Run Gateway OTelCol
 ```
