@@ -6,13 +6,13 @@ receivers:
 exporters:
   
   file/rotation_metrics:
-    path: /tmp/otelcol/file_exporter/daemonset/metrics.json
+    path: /tmp/otelcol/file_exporter/metrics.json
     rotation:
       max_megabytes: 1
       max_days: 1
       localtime: true
   file/rotation_logs:
-    path: /tmp/otelcol/file_exporter/daemonset/logs.json
+    path: /tmp/otelcol/file_exporter/logs.json
     rotation:
       max_megabytes: 1
       max_days: 1
